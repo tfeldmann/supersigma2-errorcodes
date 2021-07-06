@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "supersigma2-errorcodes"
-version = "0.1.0"
+version = "1.0"
 description = "A parser for DMC SuperSigma2 error codes"
 authors = ["Thomas Feldmann <mail@tfeldmann.de>"]
 license = "GPL-3.0-or-later"
