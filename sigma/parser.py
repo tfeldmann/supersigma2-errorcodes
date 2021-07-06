@@ -68,7 +68,7 @@ def descriptions(code, subcode=None):
     except KeyError:
         # try special cases
         for key in subdict.keys():
-            if isinstance(key, str) and eval("%s%s" % (subcode, key)):
+            if callable(key) and key(subcode):
                 return fault_msg, subdict[key]
         return fault_msg, "<unknown>"
 
