@@ -27,7 +27,7 @@ PMS_MOTOR_SUBCODES = {
 }
 
 
-ERROR_CODES = {
+ERRORS = {
     0: {
         "description": "No error",
         "subcodes": None,

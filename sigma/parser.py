@@ -1,5 +1,5 @@
 import re
-from .errors import ERROR_CODES
+from .errors import ERRORS
 
 # https://regex101.com/r/HMNQQ4/1
 ERROR_CODE_REGEX = re.compile(r"^(\d+)(?:[\.\-\,\s](\d+))?$")
@@ -28,14 +28,14 @@ SEVERITY = {
 }
 
 
-def code_to_string(code: str):
+def code_to_string(code: str, *, include_code=True):
     try:
-        return translate(*parse_code(code))
+        return _translate(*_split_code(code), include_code=include_code)
     except Exception as e:
         return "Parsing error (%s)" % e
 
 
-def parse_code(code: str):
+def _split_code(code: str):
     """
     Splits a error code in the form of "12.2" into its components ("12", "1").
     If no subcode is found, the second item in the tuple is None.
@@ -47,12 +47,25 @@ def parse_code(code: str):
     return match.groups()
 
 
-def descriptions(code, subcode=None):
+def _translate(code: int, subcode=None, *, include_code=True):
+    fault_msg, sub_msg = _descriptions(code, subcode)
+
+    if include_code:
+        if subcode and sub_msg:
+            return "[%s.%s] %s: %s" % (code, subcode, fault_msg, sub_msg)
+        return "[%s] %s" % (code, fault_msg)
+
+    if subcode and sub_msg:
+        return "%s: %s" % (fault_msg, sub_msg)
+    return fault_msg
+
+
+def _descriptions(code, subcode=None):
     code, subcode = int(code), int(subcode) if subcode else None
 
     # get fault_code
     try:
-        entry = ERROR_CODES[code]
+        entry = ERRORS[code]
         fault_msg = entry["description"]
         subdict = entry["subcodes"]
     except KeyError:
@@ -71,16 +84,3 @@ def descriptions(code, subcode=None):
             if callable(key) and key(subcode):
                 return fault_msg, subdict[key]
         return fault_msg, "<unknown>"
-
-
-def translate(code: int, subcode=None, *, include_code=True):
-    fault_msg, sub_msg = descriptions(code, subcode)
-
-    if include_code:
-        if subcode and sub_msg:
-            return "[%s.%s] %s: %s" % (code, subcode, fault_msg, sub_msg)
-        return "[%s] %s" % (code, fault_msg)
-
-    if subcode and sub_msg:
-        return "%s: %s" % (fault_msg, sub_msg)
-    return fault_msg
