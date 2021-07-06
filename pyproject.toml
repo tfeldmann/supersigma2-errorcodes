@@ -3,7 +3,7 @@ name = "supersigma2-errorcodes"
 version = "0.1.0"
 description = "A parser for DMC SuperSigma2 error codes"
 authors = ["Thomas Feldmann <mail@tfeldmann.de>"]
-license = "LGPL-3.0-or-later"
+license = "GPL-3.0-or-later"
 readme = "README.md"
 
 [tool.poetry.scripts]
