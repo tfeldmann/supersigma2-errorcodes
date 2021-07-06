@@ -5,9 +5,12 @@ description = "A parser for DMC SuperSigma2 error codes"
 authors = ["Thomas Feldmann <mail@tfeldmann.de>"]
 license = "GPL-3.0-or-later"
 readme = "README.md"
+packages = [
+    { include = "sigma" },
+]
 
 [tool.poetry.scripts]
-sigma-errorcode = "sigma_errorcodes.__main__"
+sigma = "sigma.cli:main"
 
 [tool.poetry.dependencies]
 python = "^3.6"
